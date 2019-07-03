@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(DESeq2)\n\n\ndata<-read.csv(\"/Users/stalenygard/ulven/Raw.Counts.Matrix_NumReads.csv\")\ntpm<-read.csv(\"/Users/stalenygard/ulven/Raw.Counts.Matrix_TPM.csv\")\npheno<-read.csv(\"/Users/stalenygard/ulven/Phenotype_Table.csv\",sep=\"\\t\")\nnavn<-substring(gsub(\".KF.\",\"-KF-\",names(data)),2)[-1]\nix<-match(navn,as.character(pheno[,1]))\npheno<-pheno[ix,]\npheno$ID<-as.factor(pheno$ID)\npheno$Treatment<-as.factor(pheno$Treatment)\npheno$Group<-as.factor(pheno$Group)\npheno\nl<-strsplit(as.character(data[,1]),\"\\\\|\")\nL<-do.call(rbind, l)\nD<-data[,-1]\nrow.names(D)<-make.names(L[,6],unique=TRUE)\nTPM<-tpm[,-1]\n\ngenes<-unique(L[,6])\nB.counts<-matrix(0,length(genes),ncol(data)-1)\nB.tpm<-matrix(0,length(genes),ncol(data)-1)\nfor (i in 1:length(genes)){\n  print(i)\n  ix<-which(L[,6]==genes[i])\n  B.counts[i,]<-apply(D[ix,],2,sum)\n  B.tpm[i,]<-apply(TPM[ix,],2,sum)\n}\n\nrow.names(B.counts)<-row.names(B.tpm)<-genes\n\ndds <- DESeqDataSetFromMatrix(countData = round(B.counts),\n                              colData = pheno,\n                              design = ~ ID+Treatment)\ndds<-estimateSizeFactors(dds)\n\ncounts2<-counts(dds,normalize=TRUE)\n\np.mixed<-rep(NA,nn)\nlibrary(lme4)\nix<-which(pheno$Group==1 | pheno$Group==2)\nB2<-B.tpm[,ix]\npheno2<-pheno[ix,]\nfilt<-which(apply(B2,1,quantile,0.25,na.rm=TRUE)<20)\nB3<-counts2[-filt,ix]\nnn<-nrow(B3)\n#nn<-10000\nt.mixed<-p.mixed<-rep(NA,nn)\nfor (i in 1:nn){\n  test<-glmer.nb(as.numeric(B3[i,])~pheno2$Group+pheno2$Treatment+pheno2$Group*pheno2$Treatment\n                 +(1|pheno2$ID),control=glmerControl(tolPwrss = 1e-4))\n  print(i)\n  #test<-lmer(as.numeric(D3[i,])~pheno2$Group*pheno2$Treatment+(1|pheno2$ID))\n  t.mixed[i]<-coef(summary(test))[4,3]\n  p.mixed[i]<-coef(summary(test))[4,4]\n}\nhist(p.mixed,10)\n\np.mixed<-pt(t.mixed,5)\nhist(p.mixed,100)\n\n\n\npheno2\nlibrary(limma)\nG<-D[,seq(2,ncol(D),2)]-D[,seq(1,ncol(D),2)]\npheno2<-pheno[seq(1,ncol(D),2),]\nix<-which(pheno2$Group==1 | pheno2$Group==2)\npheno3<-pheno2[ix,]\ndesign <- cbind(intercept=1,Grp2vs1=2-as.numeric(pheno3$Group))\ndesign <- cbind(intercept=1,Grp2vs1=pheno3$Group)\nG2<-G[,ix]\nfit <- lmFit(G2, design)\nfit <- eBayes(fit)\nv<-topTable(fit,number=nrow(G),sort.by=\"none\")\no<-order(v$P.Value)\nv<-v[o,]\nlength(which(v$adj<0.1))\nv[1:10,]\n\n\npheno2\nlibrary(limma)\nG<-D[,seq(2,ncol(D),2)]-D[,seq(1,ncol(D),2)]\npheno2<-pheno[seq(1,ncol(D),2),]\n#ix<-which(pheno2$Group==1 | pheno2$Group==2)\npheno3<-pheno2[ix,]\npheno3<-pheno2\n#design <- cbind(intercept=1,Grp2vs1=2-as.numeric(pheno3$Group))\ndesign <- cbind(intercept=1,group=pheno3$Group)\nG2<-G[,ix]\n#fit <- lmFit(G2, design)\nfit <- lmFit(G, design)\nfit <- eBayes(fit)\nv<-topTable(fit,number=nrow(G),sort.by=\"none\")\no<-order(v$P.Value)\nv<-v[o,]\nlength(which(v$adj<0.1))\nv[1:10,]\nhist(v$P.Value,100)\n\n#Notes\n#Kjør limma?\n#glmer.nb konvergerer ikke\n#lmer gir ikke p-verdier\n#Tar lang tid\n#Mixed effect kurs\n\n\n\n\n\n\n",
+    "created" : 1561462486732.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4050490913",
+    "id" : "9420C4F2",
+    "lastKnownWriteTime" : 1561464244,
+    "last_content_update" : 1561464244736,
+    "path" : "~/ulven/krill-cmd-3.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

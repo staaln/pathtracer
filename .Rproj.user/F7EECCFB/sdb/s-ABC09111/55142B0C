@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "setwd(\"/Users/stalenygard/neuroblastoma/mutfiles\")\n#BiocManager::install(\"goseq\")\nlibrary(goseq)\nlibrary(GO.db)\nfiles<-list.files()\nfiles<-files[1:28]\nfiles\n\n#syms<-as.character(L$SYMBOL[ix])\nlibrary(org.Hs.eg.db)\nxx <- as.list(org.Hs.egENSEMBL2EG)\ngenes<-unlist(xx)\nx2 <- as.list(org.Hs.egSYMBOL2EG)\nsyms <- unlist(x2)\nyy<- as.list(org.Hs.egGO2ALLEGS)\n\ngos<-list()\nfor (i in 1:28){\n  print(i)\n  L<-read.table(files[i],sep=\"\\t\",header=TRUE,quote=\"\")\n  ix<-grep(\"TIER\",L$TIER)\n  ens.sig<-as.character(L$ENSEMBL_GENE_ID[ix])\n  sym.sig<-as.character(L$SYMBOL[ix])\n  all.genes<-unlist(xx)\n  all.genes[1:length(all.genes)]<-0\n  all.genes[match(ens.sig,names(all.genes))]<-1\n  all.genes<-as.numeric(all.genes)\n  names(all.genes)<-names(unlist(xx))\n  pwf=nullp(all.genes,\"hg19\",\"ensGene\")\n  go=goseq(pwf,\"hg19\",\"ensGene\")\n  go$genes<-rep(NA,nrow(go))\n  sig.go<-which(go$over<0.05)\n  print(length(sig.go))\n  for (j in 1:length(sig.go)){\n    ix<-match(go[j,1],names(yy))\n    ixx<-match(unlist(yy[ix]),syms)\n    go.genes<-names(syms)[ixx]\n    go$genes[j]<-paste(intersect(go.genes,sym.sig),collapse=\" \")\n  }\n  gos[[i]]<-go\n}\n\nsig.gos<-NULL\nfor (i in 1:length(gos)){\n  ix<-which(gos[[i]]$over<0.05)\n  sig.gos<-c(sig.gos,gos[[i]]$cat[ix])\n}\n\no<-order(table(sig.gos),decreasing=TRUE)\nordered.gos<-names(table(sig.gos)[o])\n\nn<-500\np<-length(files)\nA<-B<-matrix(NA,n,p)\nfor (i in 1:n){\n  go.id<-ordered.gos[i]\n  for (j in 1:p){\n    ix<-match(go.id,gos[[j]]$category)\n    A[i,j]<-gos[[j]]$over[ix]\n    if(is.na(gos[[j]]$genes[ix])==FALSE) B[i,j]<-sort(gos[[j]]$genes[ix])\n  }\n}\n\npat.id<-rep(NA,p)\nfor(i in 1:10) pat.id[i]<-substr(files[i],1,14)\nfor(i in 11:15) pat.id[i]<-substr(files[i],1,12)\nfor(i in 16:28) pat.id[i]<-substr(files[i],1,10)\n\nD<-NULL\nfor (i in 1:ncol(A)){\n  D<-cbind(D,\"\",B[,i],A[,i])\n}\ngoterms <- Term(GOTERM)[match(ordered.gos[1:n],names(Term(GOTERM)))]\nn.genes.goterms<-rep(NA,n)\nfor (i in 1:n) n.genes.goterms[i]<-length(yy[[match(ordered.gos[i],names(yy))]])\nD<-cbind(goterms,ordered.gos[1:n],table(sig.gos)[o][1:n],n.genes.goterms,D)\n\n#row.names(D)<-ordered.gos[1:n]\ncolnames(D)<-c(\"GO term name\",\"GO id\",\"Number of patients for which the GO term was significant\",\"Number of genes in GO term\",rep(pat.id,each=3))\ncolnames(D)[seq(6,ncol(D),3)]<-paste(colnames(D)[seq(6,ncol(D),3)],\"(genes)\")\ncolnames(D)[seq(7,ncol(D),3)]<-paste(colnames(D)[seq(7,ncol(D),3)],\"(pval)\")\ncolnames(D)[seq(5,ncol(D),3)]<-\"\"\n\noutfile<-\"neuroblastoma-snv-coding-goseq-summary.txt\"\nwrite.table(D,file=outfile,sep=\"\\t\",row.names=FALSE,col.names=TRUE,quote=FALSE)\n\n\n",
+    "created" : 1562065742535.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2489150691",
+    "id" : "55142B0C",
+    "lastKnownWriteTime" : 1562064478,
+    "last_content_update" : 1562064478,
+    "path" : "~/neuroblastoma/goseq-coding-cmd.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

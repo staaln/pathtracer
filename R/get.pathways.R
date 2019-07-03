@@ -1,0 +1,66 @@
+# Hello, world!
+#
+# This is an example function named 'hello'
+# which prints 'Hello, world!'.
+#
+# You can learn more about package authoring with RStudio at:
+#
+#   http://r-pkgs.had.co.nz/
+#
+# Some useful keyboard shortcuts for package authoring:
+#
+#   Build and Reload Package:  'Cmd + Shift + B'
+#   Check Package:             'Cmd + Shift + E'
+#   Test Package:              'Cmd + Shift + T'
+
+get.pathways = function(id=c("symbol","entrez"), min.size=5, interactions=F) {
+  library(reactome.db)
+  library(hgug4112a.db)
+  # Find pathways (n=2192)
+  ptwy.ids = unlist(as.list(reactomePATHNAME2ID))
+  ptwy.all = as.list(reactomePATHID2EXTID)
+  ptwy.hs = ptwy.all[grep("HSA", names(ptwy.all))]
+  ptwy.hs.shortID = names(ptwy.hs)
+  ptwy.hs.longID = names(ptwy.ids)[match(ptwy.hs.shortID, ptwy.ids)]
+
+  # Remove pathways with too few genes
+  keep = which(sapply(ptwy.hs, length) >= min.size)
+  ptwy.hs = ptwy.hs[keep]
+  ptwy.hs.shortID = ptwy.hs.shortID[keep]
+  ptwy.hs.longID = ptwy.hs.longID[keep]
+
+  # Read interactions if required
+  if (interactions) {
+    fname = path("reactome.homo_sapiens.interactions.simplified.txt")
+    ppin = read.table(fname, header=T, sep="\t", stringsAsFactors=F)[,1:4]
+  }
+
+  # Change identifier if required
+  if (id[1] == "symbol") {
+    # entrez: Entrez ids, names(entrez): gene symbols
+    entrez = unlist(as.list(org.Hs.egSYMBOL2EG))
+    gid = lapply(ptwy.hs, function(x) sort(names(entrez)[match(x, entrez)]))
+    if (interactions) {
+      ppin[,1] = names(entrez)[match(ppin[,1],entrez)]
+      ppin[,2] = names(entrez)[match(ppin[,2],entrez)]
+    }
+  } else if (id[1] == "entrez") {
+    gid = ptwy.hs
+  }
+
+  # Simplify interaction table if required
+  if (interactions) {
+    keep = !duplicated(ppin[,1:2]) & ppin[,1]!=ppin[,2]
+    ppin = ppin[keep,]
+  }
+
+  # Remove any duplicattions in gene lists
+  gid = lapply(gid, unique)
+
+  # Return result
+  if (interactions) {
+    list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid, ppi=ppin)
+  } else {
+    list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid)
+  }
+}
