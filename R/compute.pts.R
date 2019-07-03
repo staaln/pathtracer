@@ -13,6 +13,8 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
+#' Computes PathTracer scores
+
 compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
   # Check reference argument
   if (mode(reference) == "logical") {

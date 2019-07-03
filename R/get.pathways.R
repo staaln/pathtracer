@@ -13,7 +13,15 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-get.pathways = function(id=c("symbol","entrez"), min.size=5, interactions=F) {
+#' Finds homo sapiens pathways in the reactome.db database
+#' @param id One of "symbol" or "entrez"
+#' @param min.size Minimal number of genes in a pathway
+#'
+#' @return A list of reactome pathway ids, reactome pathway descriptions, and entrez genes in each pathway
+#' @examples
+#' get.pathways()
+
+get.pathways = function(id=c("symbol","entrez"), min.size=10) {
   library(reactome.db)
   library(hgug4112a.db)
   # Find pathways (n=2192)
@@ -28,12 +36,6 @@ get.pathways = function(id=c("symbol","entrez"), min.size=5, interactions=F) {
   ptwy.hs = ptwy.hs[keep]
   ptwy.hs.shortID = ptwy.hs.shortID[keep]
   ptwy.hs.longID = ptwy.hs.longID[keep]
-
-  # Read interactions if required
-  if (interactions) {
-    fname = path("reactome.homo_sapiens.interactions.simplified.txt")
-    ppin = read.table(fname, header=T, sep="\t", stringsAsFactors=F)[,1:4]
-  }
 
   # Change identifier if required
   if (id[1] == "symbol") {
