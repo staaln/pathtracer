@@ -20,6 +20,17 @@
 #' @param ncomp Number of principal components.
 #' @param normalize Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).
 #' @param pathwayindex Integer indicating which pathway the set of input genes belongs to.
+#' @return pts Vector of PathTracer deregulation scores
+#' @return pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm)
+#' @return auc.pts
+#' @return auc.pds
+#' @return data
+#' @return ref
+#' @return res
+#' @return xcen
+#' @return v
+#' @return d
+#' @return pathwayindex
 #' @references Nygard S, Lingjaerde OC, Caldas C, Hovig E, Borresen-Dahle, Helland Aa, Haakensen V.
 #' "PathTracer: High-sensitivity detection of differential pathway activity in tumours". Submitted.
 #' @details The main PathTracer function. The input is a matrix of gene expressions
@@ -61,18 +72,18 @@ compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
   pds = res$lambda
   opr = order(pds[reference])
   xcen = res$s[which(reference)[opr[1+length(opr)/2]],]
-  qds = sqrt(apply(res$s, 1, function(x) {sum((x-xcen)^2)}))
+  pts = sqrt(apply(res$s, 1, function(x) {sum((x-xcen)^2)}))
 
   # Test for differential QDS score in reference samples vs others
-  pval = wilcox.test(qds[reference], qds[!reference])$p.value
+  pval = wilcox.test(qds[reference], pts[!reference])$p.value
 
   #auc
-  roc.res = roc(as.numeric(reference),qds)
+  roc.res = roc(as.numeric(reference),pts)
   auc.res = auc(roc.res)
   roc.res = roc(as.numeric(reference),pds)
   auc.res.2 = auc(roc.res)
 
   # Return results
-  list(qds=qds, pds=pds, p.value=pval, auc.qds=auc.res, auc.pds=auc.res.2, data=dat, ref=reference, res=res,
+  list(pts=pts, pds=pds, p.value=pval, auc.pts=auc.res, auc.pds=auc.res.2, data=dat, ref=reference, res=res,
        xcen=xcen, v=udv$v[,1:m], d=udv$d[1:m],pathwayindex=pathwayindex)
 }

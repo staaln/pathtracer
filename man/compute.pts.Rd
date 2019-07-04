@@ -17,6 +17,29 @@ compute.pts(dat, reference, ncomp = 4, normalize = T, pathwayindex)
 
 \item{pathwayindex}{Integer indicating which pathway the set of input genes belongs to.}
 }
+\value{
+pts Vector of PathTracer deregulation scores
+
+pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm)
+
+auc.pts
+
+auc.pds
+
+data
+
+ref
+
+res
+
+xcen
+
+v
+
+d
+
+pathwayindex
+}
 \description{
 Computes PathTracer deregulations scores based on gene expressions for a set of genes belonging to a particular pathway, and a set of samples, e.g normal and tumor samples.
 }
