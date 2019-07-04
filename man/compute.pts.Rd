@@ -2,10 +2,32 @@
 % Please edit documentation in R/compute.pts.R
 \name{compute.pts}
 \alias{compute.pts}
-\title{Computes PathTracer scores}
+\title{compute.pts}
 \usage{
 compute.pts(dat, reference, ncomp = 4, normalize = T, pathwayindex)
 }
+\arguments{
+\item{dat}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
+
+\item{reference}{Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).}
+
+\item{ncomp}{Number of principal components.}
+
+\item{normalize}{Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).}
+
+\item{pathwayindex}{Integer indicating which pathway the set of input genes belongs to.}
+}
 \description{
-Computes PathTracer scores
+Computes PathTracer deregulations scores based on gene expressions for a set of genes belonging to a particular pathway, and a set of samples, e.g normal and tumor samples.
+}
+\details{
+The main PathTracer function. The input is a matrix of gene expressions
+for a particular pathway and a set of samples, with rows representing genes, and colums samples.
+The function first calculates the principal curve for the first \emph{ncomp} principal components and projects all samples onto the principal curve.
+The PathTracer deregulation score (PTS) for each sample is calculated as the Euclidean distance from the sample's projection onto the principal curve to the
+reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
+}
+\references{
+Nygard S, Lingjaerde OC, Caldas C, Hovig E, Borresen-Dahle, Helland Aa, Haakensen V.
+"PathTracer: High-sensitivity detection of differential pathway activity in tumours". Submitted.
 }

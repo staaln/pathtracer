@@ -13,7 +13,20 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-#' Computes PathTracer scores
+#' @title compute.pts
+#' @description Computes PathTracer deregulations scores based on gene expressions for a set of genes belonging to a particular pathway, and a set of samples, e.g normal and tumor samples.
+#' @param dat Matrix of gene expression data with rows corresponding to genes and columns to samples.
+#' @param reference Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).
+#' @param ncomp Number of principal components.
+#' @param normalize Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).
+#' @param pathwayindex Integer indicating which pathway the set of input genes belongs to.
+#' @references Nygard S, Lingjaerde OC, Caldas C, Hovig E, Borresen-Dahle, Helland Aa, Haakensen V.
+#' "PathTracer: High-sensitivity detection of differential pathway activity in tumours". Submitted.
+#' @details The main PathTracer function. The input is a matrix of gene expressions
+#' for a particular pathway and a set of samples, with rows representing genes, and colums samples.
+#' The function first calculates the principal curve for the first \emph{ncomp} principal components and projects all samples onto the principal curve.
+#' The PathTracer deregulation score (PTS) for each sample is calculated as the Euclidean distance from the sample's projection onto the principal curve to the
+#' reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
 
 compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
   # Check reference argument
