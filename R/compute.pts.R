@@ -21,16 +21,16 @@
 #' @param normalize Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).
 #' @param pathwayindex Integer indicating which pathway the set of input genes belongs to.
 #' @return pts Vector of PathTracer deregulation scores
-#' @return pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm)
-#' @return auc.pts
-#' @return auc.pds
-#' @return data
-#' @return ref
-#' @return res
-#' @return xcen
-#' @return v
-#' @return d
-#' @return pathwayindex
+#' @return pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm).
+#' @return auc.pts Area under the ROC based on pts values, where reference samples are treated as negatives and non-reference samples as positives.
+#' @return auc.pds Area under the ROC based on pds values, where reference samples are treated as negatives and non-reference samples as positives.
+#' @return data Normalized expression matrix.
+#' @return ref Same as input variable \emph{reference}.
+#' @return res Output from principal_curve.
+#' @return xcen Reference point.
+#' @return v Matrix whose colums contain the left singular values of the normalized data matrix.
+#' @return d Vector containing the singular values of the normalized data matrix.
+#' @return pathwayindex Same as input \emph{pathwayindex}
 #' @references Nygard S, Lingjaerde OC, Caldas C, Hovig E, Borresen-Dahle, Helland Aa, Haakensen V.
 #' "PathTracer: High-sensitivity detection of differential pathway activity in tumours". Submitted.
 #' @details The main PathTracer function. The input is a matrix of gene expressions

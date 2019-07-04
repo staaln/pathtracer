@@ -20,25 +20,25 @@ compute.pts(dat, reference, ncomp = 4, normalize = T, pathwayindex)
 \value{
 pts Vector of PathTracer deregulation scores
 
-pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm)
+pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm).
 
-auc.pts
+auc.pts Area under the ROC based on pts values, where reference samples are treated as negatives and non-reference samples as positives.
 
-auc.pds
+auc.pds Area under the ROC based on pds values, where reference samples are treated as negatives and non-reference samples as positives.
 
-data
+data Normalized expression matrix.
 
-ref
+ref Same as input variable \emph{reference}.
 
-res
+res Output from principal_curve.
 
-xcen
+xcen Reference point.
 
-v
+v Matrix whose colums contain the left singular values of the normalized data matrix.
 
-d
+d Vector containing the singular values of the normalized data matrix.
 
-pathwayindex
+pathwayindex Same as input \emph{pathwayindex}
 }
 \description{
 Computes PathTracer deregulations scores based on gene expressions for a set of genes belonging to a particular pathway, and a set of samples, e.g normal and tumor samples.
