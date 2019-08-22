@@ -1,18 +1,3 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
-
 #' Finds homo sapiens pathways in the reactome.db database
 #' @param id One of "symbol" or "entrez"
 #' @param min.size Minimal number of genes in a pathway
@@ -50,19 +35,11 @@ get.pathways = function(id=c("symbol","entrez"), min.size=10) {
     gid = ptwy.hs
   }
 
-  # Simplify interaction table if required
-  if (interactions) {
-    keep = !duplicated(ppin[,1:2]) & ppin[,1]!=ppin[,2]
-    ppin = ppin[keep,]
-  }
-
   # Remove any duplicattions in gene lists
   gid = lapply(gid, unique)
 
   # Return result
-  if (interactions) {
-    list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid, ppi=ppin)
-  } else {
-    list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid)
-  }
+ 
+  list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid)
+
 }
