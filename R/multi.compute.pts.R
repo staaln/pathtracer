@@ -1,5 +1,5 @@
 #' @title pathtracer
-#' @description Computes PathTracer deregulations scores based on gene expressions for a set of pathways, and a set of samples, e.g normal and tumor samples.
+#' @description Computes PathTracer deregulations scores based on gene expressions for a set of pathways. Calls compute.pts
 #' @param data Matrix of gene expression data with rows corresponding to genes and columns to samples.
 #' @param reference Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).
 #' @param ncomp Number of principal components.
@@ -15,7 +15,7 @@
 #' The PathTracer deregulation score (PTS) for each sample is calculated as the Euclidean distance from the sample's projection onto the principal curve to the
 #' reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
 
-pathtracer = function(data, reference, ncomp=4, normalize=T,pathwaydatabase=reactome.db,ncores=1,min.n.genes=10){
+multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydatabase=reactome.db,ncores=1,min.n.genes=10){
   ptwy = get.pathways(pathwaydatabase)
   p<-length(ptwy$id)
   if (normalize) {
