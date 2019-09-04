@@ -40,13 +40,6 @@ compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
     stop("Argument must be logical vector or numeric vector: reference")
   }
 
-  # Normalize features if requested
-  if (normalize) {
-    for (i in 1:nrow(dat)) {
-      dat[i,] = (dat[i,]-mean(dat[i,]))/sd(dat[i,])
-    }
-  }
-
   # Perform PCA and keep requested number of components
   m = min(ncomp, min(dim(dat)))
   udv = svd(scale(t(dat), scale=F))
@@ -60,7 +53,7 @@ compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
   pts = sqrt(apply(res$s, 1, function(x) {sum((x-xcen)^2)}))
 
   # Test for differential QDS score in reference samples vs others
-  pval = wilcox.test(qds[reference], pts[!reference])$p.value
+  pval = wilcox.test(pts[reference], pts[!reference])$p.value
 
   #auc
   roc.res = roc(as.numeric(reference),pts)
