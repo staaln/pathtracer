@@ -4,10 +4,11 @@
 \alias{pathtracer}
 \title{pathtracer}
 \usage{
-pathtracer(dat, reference, ncomp = 4, normalize = T, pathwayindex)
+pathtracer(data, reference, ncomp = 4, normalize = T,
+  pathwaydatabase = reactome.db, ncores = 1, min.n.genes = 10)
 }
 \arguments{
-\item{dat}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
+\item{data}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
 
 \item{reference}{Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).}
 
@@ -15,33 +16,15 @@ pathtracer(dat, reference, ncomp = 4, normalize = T, pathwayindex)
 
 \item{normalize}{Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).}
 
-\item{pathwayindex}{Integer indicating which pathway the set of input genes belongs to.}
+\item{pathwaydatabase}{Currently, code only for reactome.db is implemented}
+
+\item{min.n.genes}{Minimal number of genes in a pathway required to calculate deregulations scores for the pathway}
 }
 \value{
-pts Vector of PathTracer deregulation scores
-
-pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm).
-
-auc.pts Area under the ROC based on pts values, where reference samples are treated as negatives and non-reference samples as positives.
-
-auc.pds Area under the ROC based on pds values, where reference samples are treated as negatives and non-reference samples as positives.
-
-data Normalized expression matrix.
-
-ref Same as input variable \emph{reference}.
-
-res Output from principal_curve.
-
-xcen Reference point.
-
-v Matrix whose colums contain the left singular values of the normalized data matrix.
-
-d Vector containing the singular values of the normalized data matrix.
-
-pathwayindex Same as input \emph{pathwayindex}
+res A list of
 }
 \description{
-Computes PathTracer deregulations scores based on gene expressions for a set of genes belonging to a particular pathway, and a set of samples, e.g normal and tumor samples.
+Computes PathTracer deregulations scores based on gene expressions for a set of pathways, and a set of samples, e.g normal and tumor samples.
 }
 \details{
 The main PathTracer function. The input is a matrix of gene expressions
@@ -52,5 +35,5 @@ reference point (defined as the projection onto the curve for the reference samp
 }
 \references{
 Nygard S, Lingjaerde OC, Caldas C, Hovig E, Borresen-Dahle, Helland Aa, Haakensen V.
-"PathTracer: High-sensitivity detection of differential pathway activity in tumours". Submitted.
+"PathTracer: High-sensitivity detection of differential pathway activity in tumours".
 }
