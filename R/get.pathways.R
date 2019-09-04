@@ -27,11 +27,8 @@ get.pathways = function(id=c("symbol","entrez"), min.size=10) {
     # entrez: Entrez ids, names(entrez): gene symbols
     entrez = unlist(as.list(org.Hs.egSYMBOL2EG))
     gid = lapply(ptwy.hs, function(x) sort(names(entrez)[match(x, entrez)]))
-    if (interactions) {
-      ppin[,1] = names(entrez)[match(ppin[,1],entrez)]
-      ppin[,2] = names(entrez)[match(ppin[,2],entrez)]
-    }
-  } else if (id[1] == "entrez") {
+  }
+    if (id[1] == "entrez") {
     gid = ptwy.hs
   }
 
