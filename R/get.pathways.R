@@ -1,12 +1,13 @@
-#' Finds homo sapiens pathways in the reactome.db database
+#' Finds homo sapiens pathways in a patway database
+#' @param pathwaydatabase Currently only "reactome.db" is implemented
 #' @param id One of "symbol" or "entrez"
 #' @param min.size Minimal number of genes in a pathway
 #'
-#' @return A list of reactome pathway ids, reactome pathway descriptions, and entrez genes in each pathway
+#' @return A list of pathway ids, athway descriptions, and entrez genes in each pathway
 #' @examples
 #' get.pathways()
 
-get.pathways = function(id=c("symbol","entrez"), min.size=10) {
+get.pathways = function(pathwaydatabase="reactome.db",id=c("symbol","entrez"), min.size=10) {
   library(reactome.db)
   library(hgug4112a.db)
   # Find pathways (n=2192)
@@ -36,7 +37,7 @@ get.pathways = function(id=c("symbol","entrez"), min.size=10) {
   gid = lapply(gid, unique)
 
   # Return result
- 
+
   list(id=ptwy.hs.shortID, id2=ptwy.hs.longID, genes=gid)
 
 }

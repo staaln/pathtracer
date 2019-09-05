@@ -2,10 +2,10 @@
 % Please edit documentation in R/multi.compute.pts.R
 \name{multi.compute.pts}
 \alias{multi.compute.pts}
-\title{pathtracer}
+\title{multi.compute.pts}
 \usage{
 multi.compute.pts(data, reference, ncomp = 4, normalize = T,
-  pathwaydatabase = reactome.db, ncores = 1, min.n.genes = 10)
+  pathwaydatabase = "reactome.db", ncores = 1, min.n.genes = 10)
 }
 \arguments{
 \item{data}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
@@ -18,13 +18,15 @@ multi.compute.pts(data, reference, ncomp = 4, normalize = T,
 
 \item{pathwaydatabase}{Currently, code only for reactome.db is implemented}
 
+\item{ncores}{Number of cores used for parallellization. Default value is 1, which implies no parellillization.}
+
 \item{min.n.genes}{Minimal number of genes in a pathway required to calculate deregulations scores for the pathway}
 }
 \value{
-res A list of
+res List where each element is the result of compute.pts for one pathway.
 }
 \description{
-Computes PathTracer deregulations scores based on gene expressions for a set of pathways. Calls compute.pts
+Computes PathTracer deregulation scores based on gene expressions for a set of pathways. Calls compute.pts
 }
 \details{
 The main PathTracer function. The input is a matrix of gene expressions

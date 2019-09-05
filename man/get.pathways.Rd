@@ -2,20 +2,23 @@
 % Please edit documentation in R/get.pathways.R
 \name{get.pathways}
 \alias{get.pathways}
-\title{Finds homo sapiens pathways in the reactome.db database}
+\title{Finds homo sapiens pathways in a patway database}
 \usage{
-get.pathways(id = c("symbol", "entrez"), min.size = 10)
+get.pathways(pathwaydatabase = "reactome.db", id = c("symbol",
+  "entrez"), min.size = 10)
 }
 \arguments{
+\item{pathwaydatabase}{Currently only "reactome.db" is implemented}
+
 \item{id}{One of "symbol" or "entrez"}
 
 \item{min.size}{Minimal number of genes in a pathway}
 }
 \value{
-A list of reactome pathway ids, reactome pathway descriptions, and entrez genes in each pathway
+A list of pathway ids, athway descriptions, and entrez genes in each pathway
 }
 \description{
-Finds homo sapiens pathways in the reactome.db database
+Finds homo sapiens pathways in a patway database
 }
 \examples{
 get.pathways()
