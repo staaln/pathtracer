@@ -5,14 +5,14 @@
 \title{Finds homo sapiens pathways in a patway database}
 \usage{
 get.pathways(pathwaydatabase = "reactome.db", id = c("symbol",
-  "entrez"), min.size = 10)
+  "entrez"), min.n.genes = 10)
 }
 \arguments{
 \item{pathwaydatabase}{Currently only "reactome.db" is implemented}
 
 \item{id}{One of "symbol" or "entrez"}
 
-\item{min.size}{Minimal number of genes in a pathway}
+\item{min.n.genes}{Minimal number of genes in a pathway}
 }
 \value{
 A list of pathway ids, athway descriptions, and entrez genes in each pathway

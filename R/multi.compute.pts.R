@@ -17,7 +17,7 @@
 #' reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
 
 multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydatabase="reactome.db",ncores=1,min.n.genes=10){
-  ptwy = get.pathways(pathwaydatabase=pathwaydatabase,id="symbol", min.size=10)
+  ptwy = get.pathways(pathwaydatabase=pathwaydatabase,id="symbol", min.n.genes=min.n.genes)
   p<-length(ptwy$id)
   print(p)
   if (normalize) {
