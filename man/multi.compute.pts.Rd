@@ -4,23 +4,25 @@
 \alias{multi.compute.pts}
 \title{multi.compute.pts}
 \usage{
-multi.compute.pts(data, reference, ncomp = 4, normalize = T,
-  pathwaydatabase = "reactome.db", ncores = 1, min.n.genes = 10)
+multi.compute.pts(data, gene_names = row.names(data),
+  gene.identifier = "symbol", reference,
+  pathwaydatabase = "reactome.db", min.n.genes = 10, normalize = T,
+  ncomp = 4, ncores = 1)
 }
 \arguments{
 \item{data}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
 
 \item{reference}{Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).}
 
-\item{ncomp}{Number of principal components.}
+\item{pathwaydatabase}{Currently, code only for reactome.db is implemented}
+
+\item{min.n.genes}{Minimal number of genes in a pathway required to calculate deregulations scores for the pathway}
 
 \item{normalize}{Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).}
 
-\item{pathwaydatabase}{Currently, code only for reactome.db is implemented}
+\item{ncomp}{Number of principal components.}
 
 \item{ncores}{Number of cores used for parallellization. Default value is 1, which implies no parellillization.}
-
-\item{min.n.genes}{Minimal number of genes in a pathway required to calculate deregulations scores for the pathway}
 }
 \value{
 res List where each element is the result of compute.pts for one pathway.

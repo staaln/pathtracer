@@ -16,8 +16,10 @@
 #' The PathTracer deregulation score (PTS) for each sample is calculated as the Euclidean distance from the sample's projection onto the principal curve to the
 #' reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
 
-multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydatabase="reactome.db",ncores=1,min.n.genes=10){
-  ptwy = get.pathways(pathwaydatabase=pathwaydatabase,id="symbol", min.n.genes=min.n.genes)
+multi.compute.pts = function(data, gene_names=row.names(data), gene.identifier="symbol",reference,
+                             pathwaydatabase="reactome.db",min.n.genes=10,
+                             normalize=T,ncomp=4, ncores=1){
+  ptwy = get.pathways(pathwaydatabase=pathwaydatabase,id=gene.identifier, min.n.genes=min.n.genes)
   p<-length(ptwy$id)
   print(p)
   if (normalize) {
@@ -28,7 +30,7 @@ multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydataba
     print("OK2")
     for (i in 1:p){
       print(i)
-      keep = rownames(data) %in% ptwy$genes[[i]]
+      keep = gene_names %in% ptwy$genes[[i]]
       if(length(which(keep==TRUE))>min.n.genes){
         res[[i]]= compute.pts(data[keep,], reference=reference,pathwayindex=i)
       }
@@ -38,7 +40,7 @@ multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydataba
     registerDoMC(cores=ncores)
     res<-foreach(i=1:p) %dopar% {
       print(i)
-      keep = rownames(data) %in% ptwy$genes[[i]]
+      keep = gene_names %in% ptwy$genes[[i]]
       if(length(which(keep==TRUE))>min.n.genes){
         compute.pts(data[keep,], reference=reference,ncomp=ncomp,normalize=TRUE,pathwayindex=i)
       }
