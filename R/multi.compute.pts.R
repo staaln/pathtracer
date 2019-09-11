@@ -19,12 +19,13 @@
 multi.compute.pts = function(data, reference, ncomp=4, normalize=T,pathwaydatabase="reactome.db",ncores=1,min.n.genes=10){
   ptwy = get.pathways(pathwaydatabase=pathwaydatabase,id="symbol", min.size=10)
   p<-length(ptwy$id)
+  print(p)
   if (normalize) {
-    for (i in 1:nrow(data)) {
-      data[i,] = (data[i,]-mean(data[i,]))/sd(data[i,])
-    }
+    data<-t(scale(t(data)))
   }
+  res<-list()
   if (ncores==1) {#no parallellization
+    print("OK2")
     for (i in 1:p){
       print(i)
       keep = rownames(data) %in% ptwy$genes[[i]]
