@@ -3,7 +3,6 @@
 #' @param dat Matrix of gene expression data with rows corresponding to genes and columns to samples.
 #' @param reference Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).
 #' @param ncomp Number of principal components.
-#' @param normalize Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).
 #' @param pathwayindex Integer indicating which pathway the set of input genes belongs to.
 #' @return pts Vector of PathTracer deregulation scores
 #' @return pds Vector of deregulation scores based on distance along the curve (similar to the pathifier algorithm).
@@ -24,7 +23,7 @@
 #' The PathTracer deregulation score (PTS) for each sample is calculated as the Euclidean distance from the sample's projection onto the principal curve to the
 #' reference point (defined as the projection onto the curve for the reference sample with median distance along the curve to the start of the curve). See Nygard et al (2019), for furhter details.
 
-compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
+compute.pts = function(dat, reference, ncomp=4,pathwayindex) {
   # Check reference argument
   if (mode(reference) == "logical") {
     if (length(reference) != ncol(dat)) {
@@ -42,6 +41,8 @@ compute.pts = function(dat, reference, ncomp=4, normalize=T,pathwayindex) {
 
   # Perform PCA and keep requested number of components
   m = min(ncomp, min(dim(dat)))
+  print(dim(dat))
+  #print(dat)
   udv = svd(scale(t(dat), scale=F))
   dat.pca = udv$u[,1:m] %*% diag(udv$d[1:m])  # samples x m
 

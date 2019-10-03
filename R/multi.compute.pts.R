@@ -31,8 +31,11 @@ multi.compute.pts = function(data, gene_names=row.names(data), gene.identifier="
     for (i in 1:p){
       print(i)
       keep = gene_names %in% ptwy$genes[[i]]
+      print(length(which(keep==TRUE)))
+      #print(data[keep,])
+      print(max(data[keep,]))
       if(length(which(keep==TRUE))>min.n.genes){
-        res[[i]]= compute.pts(data[keep,], reference=reference,pathwayindex=i)
+        res[[i]]= compute.pts(data[keep,], reference=reference,ncomp=ncomp,pathwayindex=i)
       }
     }
   }
@@ -42,7 +45,7 @@ multi.compute.pts = function(data, gene_names=row.names(data), gene.identifier="
       print(i)
       keep = gene_names %in% ptwy$genes[[i]]
       if(length(which(keep==TRUE))>min.n.genes){
-        compute.pts(data[keep,], reference=reference,ncomp=ncomp,normalize=TRUE,pathwayindex=i)
+        compute.pts(data[keep,], reference=reference,ncomp=ncomp,pathwayindex=i)
       }
     }
   }

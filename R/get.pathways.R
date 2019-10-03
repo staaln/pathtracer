@@ -1,11 +1,10 @@
-#' Finds homo sapiens pathways in a patway database
+#' @title get.pathways
+#' @description Finds homo sapiens pathways in a patway database
 #' @param pathwaydatabase Currently only "reactome.db" is implemented
 #' @param id One of "symbol" or "entrez"
 #' @param min.n.genes Minimal number of genes in a pathway
-#'
 #' @return A list of pathway ids, athway descriptions, and entrez genes in each pathway
-#' @examples
-#' get.pathways()
+#' @examples get.pathways()
 
 get.pathways = function(pathwaydatabase="reactome.db",id=c("symbol","entrez"), min.n.genes=10) {
   library(reactome.db)

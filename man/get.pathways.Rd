@@ -2,7 +2,7 @@
 % Please edit documentation in R/get.pathways.R
 \name{get.pathways}
 \alias{get.pathways}
-\title{Finds homo sapiens pathways in a patway database}
+\title{get.pathways}
 \usage{
 get.pathways(pathwaydatabase = "reactome.db", id = c("symbol",
   "entrez"), min.n.genes = 10)

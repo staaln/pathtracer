@@ -4,7 +4,7 @@
 \alias{compute.pts}
 \title{compute.pts}
 \usage{
-compute.pts(dat, reference, ncomp = 4, normalize = T, pathwayindex)
+compute.pts(dat, reference, ncomp = 4, pathwayindex)
 }
 \arguments{
 \item{dat}{Matrix of gene expression data with rows corresponding to genes and columns to samples.}
@@ -12,8 +12,6 @@ compute.pts(dat, reference, ncomp = 4, normalize = T, pathwayindex)
 \item{reference}{Bolean vector indicating which of the columns in \emph{dat} that are reference samples (e.g normal samples).}
 
 \item{ncomp}{Number of principal components.}
-
-\item{normalize}{Boolean. If true, gene expression values are normalized (for each gene, the mean is subtracted and the standard deviation divided upon).}
 
 \item{pathwayindex}{Integer indicating which pathway the set of input genes belongs to.}
 }
